@@ -6,7 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server",
-    "live": "nodemon server"
+    "live": "nodemon server",
+    "client": "npm start --prefix client",
+    "dev": "concurrently \"npm run live\" \"npm run client\""
   },
   "author": "Malay Sarkar",
   "license": "MIT",

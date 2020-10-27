@@ -7,7 +7,7 @@ connectDB();
 // init middleware
 app.use(express.json({ extended: false }));
 
-var port = process.env.port || 5000;
+var port = process.env.port || 5050;
 app.listen(port, () => console.log(`listening at port ${port}`));
 
 app.get('/', (req, res) => res.send('homepage showing.'));
