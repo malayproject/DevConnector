@@ -4,6 +4,7 @@ const router = express.Router();
 const auth = require('../../middleware/auth');
 const Profile = require('../../models/Profile');
 const User = require('../../models/User');
+const Post = require('../../models/Post');
 
 //@route     GET  /api/profile/me
 //@desc     get current user's profile
@@ -135,7 +136,8 @@ router.get('/user', async (req, res) => {
 //@access   private
 router.delete('/', auth, async (req, res) => {
   try {
-    //todo: remove posts of user
+    //delete user post
+    await Post.deleteMany({user: req.user.id});
 
     //remove profile
     await Profile.findOneAndRemove({ user: req.user.id });
@@ -192,15 +194,15 @@ router.put(
 //@route    DELETE  /api/profile/experience/:exp_id
 //@desc     delete user experience by experience_id in profile
 //@access   private
-router.delete('/experience', auth, async (req, res) => {
+router.delete('/experience/:exp_id', auth, async (req, res) => {
   try {
     const profile = await Profile.findOne({ user: req.user.id });
     const expUpdated = profile.experience.filter(
-      (currExp) => !(currExp._id == req.query.exp_id)
+      (currExp) => !(currExp._id == req.params.exp_id)
     );
     profile.experience = expUpdated;
     await profile.save();
-    res.json(profile.experience);
+    res.json(profile);
   } catch (err) {
     console.log(err.message);
     res.status(500).send('server error');
@@ -259,15 +261,15 @@ router.put(
 //@route    DELETE  /api/profile/education/:edu_id
 //@desc     delete user education by education_id in profile
 //@access   private
-router.delete('/education', auth, async (req, res) => {
+router.delete('/education/:edu_id', auth, async (req, res) => {
   try {
     const profile = await Profile.findOne({ user: req.user.id });
     const eduUpdated = profile.education.filter(
-      (currEdu) => !(currEdu._id == req.query.edu_id)
+      (currEdu) => !(currEdu._id == req.params.edu_id)
     );
     profile.education = eduUpdated;
     await profile.save();
-    res.json(profile.education);
+    res.json(profile);
   } catch (err) {
     console.log(err.message);
     res.status(500).send('server error');
