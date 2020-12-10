@@ -1,4 +1,5 @@
 import React, {useEffect} from 'react'
+import {Link} from 'react-router-dom'
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
 import {getGithubRepos} from '../../actions/profile'
@@ -15,9 +16,9 @@ const ProfileGithub = ({username, getGithubRepos, repos}) => {
                     <div key={repo._id} className="repo bg-white p-1 my-1">
                         <div>
                             <h4>
-                                <a href={repo.html_url} target='_blank' rel='noopener noreferrer'>
+                                <Link to={repo.html_url} target='_blank' rel='noopener noreferrer'>
                                     {repo.name}
-                                </a>
+                                </Link>
                             </h4>
                         </div>
                     </div>
