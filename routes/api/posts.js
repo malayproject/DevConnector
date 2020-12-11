@@ -125,24 +125,33 @@ router.put('/like/:post_id', auth, async (req, res) => {
 router.delete('/unlike/:post_id', auth, async (req, res) => {
   try {
     const post = await Post.findById(req.params.post_id);
-    if (!post) {
-      return res.status(404).json({ msg: 'post not found' });
+
+    //check if the post has already been liked
+    if(post.likes.filter(like => like.user.toString() === req.user.id).length === 0) {
+      return res.status(400).json({msg: 'post has not yet been liked'});
     }
-    let likesL = post.likes.length;
-    const likes = post.likes.filter(
-      (like) => like.user.toString() !== req.user.id
-    );
-    if (likes.length === likesL) {
-      return res.status(400).json({ msg: "post has't yet been liked by user" });
-    }
-    post.likes = likes;
+
+    //get removed index
+    const removeIndex = post.likes.map(like => like.user.toString()).indexOf(req.user.id);
+
+    post.likes.splice(removeIndex, 1);
     await post.save();
     res.json(post.likes);
+    // if (!post) {
+    //   return res.status(404).json({ msg: 'post not found' });
+    // }
+    // let likesL = post.likes.length;
+    // const likes = post.likes.filter(
+    //   (like) => like.user.toString() !== req.user.id
+    // );
+    // if (likes.length === likesL) {
+    //   return res.status(400).json({ msg: "post has't yet been liked by user" });
+    // }
+    // post.likes = likes;
+    // await post.save();
+    // res.json(post.likes);
   } catch (err) {
-    console.log(err.message);
-    if (err.kind === 'ObjectId') {
-      return res.status(404).json({ msg: 'post not found' });
-    }
+    console.error(err.message);
     res.status(500).send('server error');
   }
 });
