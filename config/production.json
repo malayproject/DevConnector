@@ -1,0 +1,4 @@
+{
+    "mongoURI": "mongodb+srv://firstmern:M0yIe1G7niMQUupX@devconnector.jbtbe.mongodb.net/DevConnector?retryWrites=true&w=majority",
+    "jwtSecret": "0b8add13-bdb7-4abc-bf15-80c2d21b6d42"
+  }
